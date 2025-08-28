@@ -3,7 +3,7 @@ const ASSETS = [
   '/',
   '/index.html',
   '/manifest.json',
-  'https://cdn.worldvectorlogo.com/logos/nhl.svg'
+  'https://upload.wikimedia.org/wikipedia/commons/e/e4/NHL_Logo_former.svg'
 ];
 
 self.addEventListener('install', e => {

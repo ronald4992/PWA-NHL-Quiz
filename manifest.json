@@ -3,14 +3,15 @@
   "short_name": "NHL Scores",
   "start_url": ".",
   "display": "standalone",
-  "background_color": "#ffffff",
-  "theme_color": "#007BFF",
-  "description": "App simple de marcadores NHL simulados",
+  "background_color": "#1e3a8a",
+  "theme_color": "#1e3a8a",
   "icons": [
     {
       "src": "https://cdn.worldvectorlogo.com/logos/nhl.svg",
       "sizes": "512x512",
       "type": "image/svg+xml"
     }
-  ]
+  ],
+  "description": "Aplicación PWA para ver marcadores en vivo de la NHL"
 }
+

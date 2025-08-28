@@ -5,13 +5,14 @@
   "display": "standalone",
   "background_color": "#1e3a8a",
   "theme_color": "#1e3a8a",
+  "description": "Aplicación PWA para ver marcadores en vivo de la NHL",
   "icons": [
     {
-      "src": "https://cdn.worldvectorlogo.com/logos/nhl.svg",
+      "src": "https://upload.wikimedia.org/wikipedia/commons/e/e4/NHL_Logo_former.svg",
       "sizes": "512x512",
       "type": "image/svg+xml"
     }
-  ],
-  "description": "Aplicación PWA para ver marcadores en vivo de la NHL"
+  ]
 }
+
 

@@ -2,122 +2,166 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <header><img src="https://upload.wikimedia.org/wikipedia/commons/e/e4/NHL_Logo_former.svg" alt="NHL Logo" />
-</header>
-  <title>Marcadores NHL PWA</title>
-  <!-- Manifest PWA -->
-  <link rel="manifest" href="manifest.json">
-  <meta name="theme-color" content="#1e3a8a">
+  <title>Quiz NHL</title>
   <style>
     body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: linear-gradient(135deg, #1e3a8a, #60a5fa);
-      color: white;
-      margin: 0;
+      font-family: Arial, sans-serif;
+      background-color: #0d1b2a;
+      color: #ffffff;
       display: flex;
       flex-direction: column;
       align-items: center;
-      padding: 20px;
+      padding: 40px;
     }
-    header {
-      text-align: center;
+
+    h1 {
+      color: #f0a500;
+    }
+
+    .quiz-container {
+      background-color: #1b263b;
+      padding: 20px 30px;
+      border-radius: 10px;
+      max-width: 600px;
+      width: 100%;
+    }
+
+    .question {
+      font-size: 20px;
       margin-bottom: 20px;
     }
-    header img {
-      height: 80px;
-    }
-    h1 {
-      margin: 10px 0 0;
-      font-size: 2em;
-    }
-    #scores {
+
+    .options button {
+      display: block;
       width: 100%;
-      max-width: 600px;
-    }
-    .game-card {
-      background: rgba(255, 255, 255, 0.1);
-      border-radius: 10px;
-      padding: 15px;
-      margin-bottom: 15px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      transition: background 0.3s;
-    }
-    .game-card:hover {
-      background: rgba(255, 255, 255, 0.2);
-    }
-    .teams {
-      font-weight: bold;
-      font-size: 1.1em;
-    }
-    .score {
-      font-size: 1.4em;
-    }
-    #refreshBtn {
-      background: #2563eb;
-      border: none;
+      margin: 8px 0;
+      padding: 10px;
+      font-size: 16px;
+      background-color: #415a77;
       color: white;
-      padding: 12px 24px;
-      font-size: 1em;
-      border-radius: 8px;
+      border: none;
+      border-radius: 5px;
       cursor: pointer;
-      margin-top: 20px;
-      transition: background 0.3s;
+      transition: background-color 0.2s ease;
     }
-    #refreshBtn:hover {
-      background: #1e40af;
+
+    .options button:hover {
+      background-color: #778da9;
+    }
+
+    #result {
+      margin-top: 20px;
+      font-size: 18px;
+    }
+
+    #next-btn {
+      margin-top: 20px;
+      padding: 10px 20px;
+      background-color: #f0a500;
+      border: none;
+      color: #000;
+      font-weight: bold;
+      cursor: pointer;
+      border-radius: 5px;
+    }
+
+    #next-btn:hover {
+      background-color: #ffbb33;
     }
   </style>
 </head>
 <body>
-  <header>
-    <img src="https://cdn.worldvectorlogo.com/logos/nhl.svg" alt="NHL Logo">
-    <h1>Marcadores NHL</h1>
-  </header>
-  <div id="scores"><em>Cargando...</em></div>
-  <button id="refreshBtn">Actualizar</button>
+  <h1>Quiz de la NHL</h1>
+  <div class="quiz-container">
+    <div id="question" class="question">Cargando pregunta...</div>
+    <div class="options" id="options"></div>
+    <div id="result"></div>
+    <button id="next-btn" style="display: none;">Siguiente</button>
+  </div>
 
   <script>
-    const apiUrl = 'https://YOUR-DEPLOYED-NHL-SCORE-API/api/scores/latest'; // Ajustar según tu despliegue
-
-    async function fetchScores() {
-      const container = document.getElementById('scores');
-      container.innerHTML = '<em>Cargando...</em>';
-      try {
-        const res = await fetch(apiUrl);
-        const data = await res.json();
-        container.innerHTML = '';
-        if (data.games && data.games.length) {
-          data.games.forEach(game => {
-            const card = document.createElement('div');
-            card.className = 'game-card';
-            const teams = document.createElement('div');
-            teams.className = 'teams';
-            teams.textContent = `${game.teams.home.name} vs ${game.teams.away.name}`;
-            const score = document.createElement('div');
-            score.className = 'score';
-            score.textContent = `${game.scores.home} – ${game.scores.away}`;
-            card.append(teams, score);
-            container.appendChild(card);
-          });
-        } else {
-          container.innerHTML = '<em>No hay partidos disponibles.</em>';
-        }
-      } catch (err) {
-        container.innerHTML = '<em>Error cargando datos.</em>';
-        console.error(err);
+    const questions = [
+      {
+        question: "¿Cuál equipo ha ganado más Copas Stanley?",
+        options: ["Toronto Maple Leafs", "Montreal Canadiens", "Chicago Blackhawks", "Boston Bruins"],
+        answer: "Montreal Canadiens"
+      },
+      {
+        question: "¿Quién es el máximo goleador de todos los tiempos en la NHL?",
+        options: ["Wayne Gretzky", "Alexander Ovechkin", "Mario Lemieux", "Gordie Howe"],
+        answer: "Wayne Gretzky"
+      },
+      {
+        question: "¿Qué equipo se unió a la NHL en 2017?",
+        options: ["Seattle Kraken", "Vegas Golden Knights", "Winnipeg Jets", "Columbus Blue Jackets"],
+        answer: "Vegas Golden Knights"
       }
+    ];
+
+    let currentQuestionIndex = 0;
+
+    const questionEl = document.getElementById("question");
+    const optionsEl = document.getElementById("options");
+    const resultEl = document.getElementById("result");
+    const nextBtn = document.getElementById("next-btn");
+
+    function loadQuestion() {
+      const currentQuestion = questions[currentQuestionIndex];
+      questionEl.textContent = currentQuestion.question;
+      optionsEl.innerHTML = "";
+      resultEl.textContent = "";
+      nextBtn.style.display = "none";
+
+      currentQuestion.options.forEach(option => {
+        const button = document.createElement("button");
+        button.textContent = option;
+        button.onclick = () => checkAnswer(option);
+        optionsEl.appendChild(button);
+      });
     }
 
-    document.getElementById('refreshBtn').onclick = fetchScores;
-    fetchScores();
+    function checkAnswer(selectedOption) {
+      const correctAnswer = questions[currentQuestionIndex].answer;
+      const buttons = document.querySelectorAll(".options button");
 
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('sw.js').then(() => console.log('SW registrado'));
+      buttons.forEach(button => {
+        button.disabled = true;
+        if (button.textContent === correctAnswer) {
+          button.style.backgroundColor = "green";
+        } else if (button.textContent === selectedOption) {
+          button.style.backgroundColor = "red";
+        }
+      });
+
+      if (selectedOption === correctAnswer) {
+        resultEl.textContent = "¡Correcto!";
+      } else {
+        resultEl.textContent = `Incorrecto. La respuesta correcta es: ${correctAnswer}`;
+      }
+
+      nextBtn.style.display = "block";
     }
+
+    nextBtn.addEventListener("click", () => {
+      currentQuestionIndex++;
+      if (currentQuestionIndex < questions.length) {
+        loadQuestion();
+      } else {
+        showFinalResult();
+      }
+    });
+
+    function showFinalResult() {
+      questionEl.textContent = "¡Has completado el quiz!";
+      optionsEl.innerHTML = "";
+      resultEl.textContent = `Respondiste ${questions.length} preguntas. ¡Gracias por jugar!`;
+      nextBtn.style.display = "none";
+    }
+
+    // Iniciar quiz
+    loadQuestion();
   </script>
 </body>
 </html>
+
 

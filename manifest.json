@@ -1,0 +1,16 @@
+{
+  "name": "Marcadores NHL",
+  "short_name": "NHL Scores",
+  "start_url": ".",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#007BFF",
+  "description": "App simple de marcadores NHL simulados",
+  "icons": [
+    {
+      "src": "https://cdn.worldvectorlogo.com/logos/nhl.svg",
+      "sizes": "512x512",
+      "type": "image/svg+xml"
+    }
+  ]
+}

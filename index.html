@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-   <img 
-    src="https://upload.wikimedia.org/wikipedia/commons/e/e4/NHL_Logo_former.svg" 
-    alt="Logo NHL" 
-    style="width:100px; height:auto; margin-bottom: 20px;"
-  />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Quiz NHL</title>
+
+  <!-- Manifest para PWA -->
+  <link rel="manifest" href="./manifest.json" />
+
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -73,9 +73,23 @@
     #next-btn:hover {
       background-color: #ffbb33;
     }
+
+    /* Icono NHL */
+    .icon-nhl {
+      width: 100px;
+      height: auto;
+      margin-bottom: 20px;
+    }
   </style>
 </head>
 <body>
+  <!-- Imagen del logo NHL -->
+  <img 
+    src="https://upload.wikimedia.org/wikipedia/commons/e/e4/NHL_Logo_former.svg" 
+    alt="Logo NHL" 
+    class="icon-nhl"
+  />
+
   <h1>Quiz de la NHL</h1>
   <div class="quiz-container">
     <div id="question" class="question">Cargando pregunta...</div>
@@ -85,6 +99,7 @@
   </div>
 
   <script>
+    // Preguntas del quiz ampliadas
     const questions = [
       {
         question: "¿Cuál equipo ha ganado más Copas Stanley?",
@@ -94,12 +109,47 @@
       {
         question: "¿Quién es el máximo goleador de todos los tiempos en la NHL?",
         options: ["Wayne Gretzky", "Alexander Ovechkin", "Mario Lemieux", "Gordie Howe"],
-        answer: "Alexander Ovechkin"
+        answer: "Wayne Gretzky"
       },
       {
         question: "¿Qué equipo se unió a la NHL en 2017?",
         options: ["Seattle Kraken", "Vegas Golden Knights", "Winnipeg Jets", "Columbus Blue Jackets"],
         answer: "Vegas Golden Knights"
+      },
+      {
+        question: "¿Qué jugador es conocido como 'The Great One'?",
+        options: ["Mario Lemieux", "Wayne Gretzky", "Sidney Crosby", "Bobby Orr"],
+        answer: "Wayne Gretzky"
+      },
+      {
+        question: "¿Cuál es el equipo más antiguo de la NHL que sigue activo?",
+        options: ["Montreal Canadiens", "Toronto Maple Leafs", "Boston Bruins", "New York Rangers"],
+        answer: "Montreal Canadiens"
+      },
+      {
+        question: "¿Cuántos jugadores hay en el hielo por equipo durante un partido estándar?",
+        options: ["5", "6", "7", "4"],
+        answer: "6"
+      },
+      {
+        question: "¿Quién fue el primer jugador en marcar 50 goles en 50 partidos?",
+        options: ["Mike Bossy", "Wayne Gretzky", "Maurice Richard", "Bobby Hull"],
+        answer: "Maurice Richard"
+      },
+      {
+        question: "¿Cuál es el trofeo que se otorga al mejor jugador de la temporada regular?",
+        options: ["Trofeo Hart", "Trofeo Norris", "Trofeo Calder", "Trofeo Vezina"],
+        answer: "Trofeo Hart"
+      },
+      {
+        question: "¿Qué ciudad tiene dos equipos en la NHL?",
+        options: ["Nueva York", "Toronto", "Chicago", "Montreal"],
+        answer: "Nueva York"
+      },
+      {
+        question: "¿Cuál es el nombre del trofeo que se otorga al campeón de la Stanley Cup?",
+        options: ["Trofeo Campbell", "Trofeo Prince de Gales", "Copa Stanley", "Trofeo Presidents"],
+        answer: "Copa Stanley"
       }
     ];
 
@@ -163,18 +213,20 @@
       nextBtn.style.display = "none";
     }
 
-    // Iniciar quiz
+    // Cargar la primera pregunta al iniciar
     loadQuestion();
   </script>
+
+  <!-- Registrar Service Worker -->
   <script>
-  if ('serviceWorker' in navigator) {
-    window.addEventListener('load', () => {
-      navigator.serviceWorker.register('./service-worker.js')
-        .then(reg => console.log('Service Worker registrado:', reg))
-        .catch(err => console.log('Error en registro Service Worker:', err));
-    });
-  }
-</script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('./service-worker.js')
+          .then(reg => console.log('Service Worker registrado:', reg))
+          .catch(err => console.error('Error al registrar Service Worker:', err));
+      });
+    }
+  </script>
 </body>
 </html>
 

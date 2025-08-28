@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Quiz NHL</title>
 
-  <!-- Manifest para PWA -->
   <link rel="manifest" href="./manifest.json" />
 
   <style>
@@ -74,7 +73,6 @@
       background-color: #ffbb33;
     }
 
-    /* Icono NHL */
     .icon-nhl {
       width: 100px;
       height: auto;
@@ -83,7 +81,6 @@
   </style>
 </head>
 <body>
-  <!-- Imagen del logo NHL -->
   <img 
     src="https://upload.wikimedia.org/wikipedia/commons/e/e4/NHL_Logo_former.svg" 
     alt="Logo NHL" 
@@ -98,8 +95,7 @@
     <button id="next-btn" style="display: none;">Siguiente</button>
   </div>
 
-  <script>
-    // Preguntas del quiz ampliadas
+  <script defer>
     const questions = [
       {
         question: "¿Cuál equipo ha ganado más Copas Stanley?",
@@ -161,18 +157,28 @@
     const nextBtn = document.getElementById("next-btn");
 
     function loadQuestion() {
-      const currentQuestion = questions[currentQuestionIndex];
-      questionEl.textContent = currentQuestion.question;
-      optionsEl.innerHTML = "";
-      resultEl.textContent = "";
-      nextBtn.style.display = "none";
+      try {
+        if(currentQuestionIndex >= questions.length){
+          showFinalResult();
+          return;
+        }
 
-      currentQuestion.options.forEach(option => {
-        const button = document.createElement("button");
-        button.textContent = option;
-        button.onclick = () => checkAnswer(option);
-        optionsEl.appendChild(button);
-      });
+        const currentQuestion = questions[currentQuestionIndex];
+        questionEl.textContent = currentQuestion.question;
+        optionsEl.innerHTML = "";
+        resultEl.textContent = "";
+        nextBtn.style.display = "none";
+
+        currentQuestion.options.forEach(option => {
+          const button = document.createElement("button");
+          button.textContent = option;
+          button.onclick = () => checkAnswer(option);
+          optionsEl.appendChild(button);
+        });
+      } catch (error) {
+        questionEl.textContent = "Error cargando la pregunta.";
+        console.error("Error en loadQuestion:", error);
+      }
     }
 
     function checkAnswer(selectedOption) {
@@ -199,11 +205,7 @@
 
     nextBtn.addEventListener("click", () => {
       currentQuestionIndex++;
-      if (currentQuestionIndex < questions.length) {
-        loadQuestion();
-      } else {
-        showFinalResult();
-      }
+      loadQuestion();
     });
 
     function showFinalResult() {
@@ -213,11 +215,10 @@
       nextBtn.style.display = "none";
     }
 
-    // Cargar la primera pregunta al iniciar
+    // Carga inicial
     loadQuestion();
   </script>
 
-  <!-- Registrar Service Worker -->
   <script>
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {

@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Marcadores NHL Simulados</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    background: #f0f0f0;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 20px;
+  }
+  .container {
+    background: white;
+    padding: 20px;
+    width: 350px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    text-align: center;
+  }
+  h1 {
+    margin-bottom: 15px;
+  }
+  .score-item {
+    background: #eee;
+    margin-bottom: 10px;
+    padding: 12px;
+    border-radius: 6px;
+  }
+  .teams {
+    font-weight: bold;
+    font-size: 18px;
+  }
+  .score {
+    margin-top: 6px;
+    font-size: 16px;
+  }
+  .status {
+    margin-top: 4px;
+    font-size: 14px;
+    color: #555;
+  }
+  button {
+    margin-top: 15px;
+    padding: 10px 20px;
+    font-size: 16px;
+    background: #007BFF;
+    border: none;
+    color: white;
+    border-radius: 6px;
+    cursor: pointer;
+  }
+  button:hover {
+    background: #0056b3;
+  }
+</style>
+</head>
+<body>
+  <div class="container">
+    <h1>Marcadores NHL</h1>
+    <div id="scores"></div>
+    <button id="refreshBtn">Actualizar Marcadores</button>
+  </div>
+
+<script>
+  // Datos simulados de partidos NHL
+  const games = [
+    {
+      home_team: "Toronto Maple Leafs",
+      away_team: "Montreal Canadiens",
+      home_score: 3,
+      away_score: 2,
+      status: "Finalizado"
+    },
+    {
+      home_team: "Boston Bruins",
+      away_team: "New York Rangers",
+      home_score: 1,
+      away_score: 1,
+      status: "En progreso - 2do periodo"
+    },
+    {
+      home_team: "Chicago Blackhawks",
+      away_team: "Detroit Red Wings",
+      home_score: 0,
+      away_score: 0,
+      status: "Por comenzar"
+    }
+  ];
+
+  // Función para mostrar los marcadores
+  function showScores() {
+    const scoresDiv = document.getElementById('scores');
+    scoresDiv.innerHTML = ''; // Limpiar antes de agregar
+
+    games.forEach(game => {
+      const div = document.createElement('div');
+      div.className = 'score-item';
+
+      div.innerHTML = `
+        <div class="teams">${game.home_team} vs ${game.away_team}</div>
+        <div class="score">${game.home_score} - ${game.away_score}</div>
+        <div class="status">${game.status}</div>
+      `;
+
+      scoresDiv.appendChild(div);
+    });
+  }
+
+  // Actualizar marcadores al cargar la página
+  showScores();
+
+  // Botón para "actualizar" (simulamos cambio en los datos)
+  document.getElementById('refreshBtn').addEventListener('click', () => {
+    // Simular actualización: cambiar algún marcador al azar
+    const randomGameIndex = Math.floor(Math.random() * games.length);
+    games[randomGameIndex].home_score += Math.floor(Math.random() * 2); // Sumar 0 o 1 puntos
+    games[randomGameIndex].away_score += Math.floor(Math.random() * 2);
+
+    // Actualizar estado
+    games[randomGameIndex].status = "En progreso - 3er periodo";
+
+    showScores();
+  });
+</script>
+</body>
+</html>

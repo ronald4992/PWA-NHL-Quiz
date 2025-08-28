@@ -1,140 +1,121 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Marcadores NHL Simulados</title>
-  <link rel="manifest" href="manifest.json" />
-<meta name="theme-color" content="#007BFF" />
-
-<style>
-  body {
-    font-family: Arial, sans-serif;
-    background: #f0f0f0;
-    display: flex;
-    justify-content: center;
-    align-items: flex-start;
-    padding: 20px;
-  }
-  .container {
-    background: white;
-    padding: 20px;
-    width: 350px;
-    border-radius: 8px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-    text-align: center;
-  }
-  h1 {
-    margin-bottom: 15px;
-  }
-  .score-item {
-    background: #eee;
-    margin-bottom: 10px;
-    padding: 12px;
-    border-radius: 6px;
-  }
-  .teams {
-    font-weight: bold;
-    font-size: 18px;
-  }
-  .score {
-    margin-top: 6px;
-    font-size: 16px;
-  }
-  .status {
-    margin-top: 4px;
-    font-size: 14px;
-    color: #555;
-  }
-  button {
-    margin-top: 15px;
-    padding: 10px 20px;
-    font-size: 16px;
-    background: #007BFF;
-    border: none;
-    color: white;
-    border-radius: 6px;
-    cursor: pointer;
-  }
-  button:hover {
-    background: #0056b3;
-  }
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Marcadores NHL PWA</title>
+  <!-- Manifest PWA -->
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#1e3a8a">
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #1e3a8a, #60a5fa);
+      color: white;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px;
+    }
+    header {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    header img {
+      height: 80px;
+    }
+    h1 {
+      margin: 10px 0 0;
+      font-size: 2em;
+    }
+    #scores {
+      width: 100%;
+      max-width: 600px;
+    }
+    .game-card {
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 10px;
+      padding: 15px;
+      margin-bottom: 15px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: background 0.3s;
+    }
+    .game-card:hover {
+      background: rgba(255, 255, 255, 0.2);
+    }
+    .teams {
+      font-weight: bold;
+      font-size: 1.1em;
+    }
+    .score {
+      font-size: 1.4em;
+    }
+    #refreshBtn {
+      background: #2563eb;
+      border: none;
+      color: white;
+      padding: 12px 24px;
+      font-size: 1em;
+      border-radius: 8px;
+      cursor: pointer;
+      margin-top: 20px;
+      transition: background 0.3s;
+    }
+    #refreshBtn:hover {
+      background: #1e40af;
+    }
+  </style>
 </head>
 <body>
-  <div class="container">
+  <header>
+    <img src="https://cdn.worldvectorlogo.com/logos/nhl.svg" alt="NHL Logo">
     <h1>Marcadores NHL</h1>
-    <div id="scores"></div>
-    <button id="refreshBtn">Actualizar Marcadores</button>
-  </div>
+  </header>
+  <div id="scores"><em>Cargando...</em></div>
+  <button id="refreshBtn">Actualizar</button>
 
-<script>
-  // Datos simulados de partidos NHL
-  const games = [
-    {
-      home_team: "Toronto Maple Leafs",
-      away_team: "Montreal Canadiens",
-      home_score: 3,
-      away_score: 2,
-      status: "Finalizado"
-    },
-    {
-      home_team: "Boston Bruins",
-      away_team: "New York Rangers",
-      home_score: 1,
-      away_score: 1,
-      status: "En progreso - 2do periodo"
-    },
-    {
-      home_team: "Chicago Blackhawks",
-      away_team: "Detroit Red Wings",
-      home_score: 0,
-      away_score: 0,
-      status: "Por comenzar"
-    }
-  ];
-
-  // Función para mostrar los marcadores
-  function showScores() {
-    const scoresDiv = document.getElementById('scores');
-    scoresDiv.innerHTML = ''; // Limpiar antes de agregar
-
-    games.forEach(game => {
-      const div = document.createElement('div');
-      div.className = 'score-item';
-
-      div.innerHTML = `
-        <div class="teams">${game.home_team} vs ${game.away_team}</div>
-        <div class="score">${game.home_score} - ${game.away_score}</div>
-        <div class="status">${game.status}</div>
-      `;
-
-      scoresDiv.appendChild(div);
-    });
-  }
-
-  // Actualizar marcadores al cargar la página
-  showScores();
-
-  // Botón para "actualizar" (simulamos cambio en los datos)
-  document.getElementById('refreshBtn').addEventListener('click', () => {
-    // Simular actualización: cambiar algún marcador al azar
-    const randomGameIndex = Math.floor(Math.random() * games.length);
-    games[randomGameIndex].home_score += Math.floor(Math.random() * 2); // Sumar 0 o 1 puntos
-    games[randomGameIndex].away_score += Math.floor(Math.random() * 2);
-
-    // Actualizar estado
-    games[randomGameIndex].status = "En progreso - 3er periodo";
-
-    showScores();
-  });
-</script>
   <script>
-  if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('service-worker.js')
-      .then(() => console.log('Service Worker registrado'))
-      .catch(err => console.error('Error registrando Service Worker:', err));
-  }
-</script>
+    const apiUrl = 'https://YOUR-DEPLOYED-NHL-SCORE-API/api/scores/latest'; // Ajustar según tu despliegue
+
+    async function fetchScores() {
+      const container = document.getElementById('scores');
+      container.innerHTML = '<em>Cargando...</em>';
+      try {
+        const res = await fetch(apiUrl);
+        const data = await res.json();
+        container.innerHTML = '';
+        if (data.games && data.games.length) {
+          data.games.forEach(game => {
+            const card = document.createElement('div');
+            card.className = 'game-card';
+            const teams = document.createElement('div');
+            teams.className = 'teams';
+            teams.textContent = `${game.teams.home.name} vs ${game.teams.away.name}`;
+            const score = document.createElement('div');
+            score.className = 'score';
+            score.textContent = `${game.scores.home} – ${game.scores.away}`;
+            card.append(teams, score);
+            container.appendChild(card);
+          });
+        } else {
+          container.innerHTML = '<em>No hay partidos disponibles.</em>';
+        }
+      } catch (err) {
+        container.innerHTML = '<em>Error cargando datos.</em>';
+        console.error(err);
+      }
+    }
+
+    document.getElementById('refreshBtn').onclick = fetchScores;
+    fetchScores();
+
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('sw.js').then(() => console.log('SW registrado'));
+    }
+  </script>
 </body>
 </html>
+
